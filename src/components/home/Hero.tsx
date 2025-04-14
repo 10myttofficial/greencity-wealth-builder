@@ -58,7 +58,7 @@ const Hero = () => {
           <div className="relative hidden md:block">
             <div className="rounded-3xl overflow-hidden shadow-2xl bg-white p-2">
               <img 
-                src="https://images.unsplash.com/photo-1637763723578-79a4ca9172b3?q=80&w=1000" 
+                src="/lovable-uploads/053dd101-6c51-4bdc-bafa-831c435e5eed.png" 
                 alt="Financial planning" 
                 className="rounded-2xl w-full h-[500px] object-cover"
               />
