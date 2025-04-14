@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Eye, EyeOff, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 
 const SignUpForm = () => {
   const [step, setStep] = useState(1);
@@ -18,7 +19,8 @@ const SignUpForm = () => {
     password: '',
     confirmPassword: '',
   });
-  const [loading, setLoading] = useState(false);
+  
+  const { signUp, loading } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -33,16 +35,18 @@ const SignUpForm = () => {
     setStep(2);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
-      // Move to KYC onboarding flow
-      window.location.href = '/onboarding';
-    }, 1500);
+    if (formData.password !== formData.confirmPassword) {
+      return; // Passwords don't match validation (button should be disabled anyway)
+    }
+    
+    await signUp(formData.email, formData.password, {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      phone: formData.phone,
+    });
   };
 
   // Password strength check

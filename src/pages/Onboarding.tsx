@@ -1,10 +1,11 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 import { 
   ChevronRight, 
   ChevronLeft, 
@@ -15,18 +16,86 @@ import {
   Upload,
   HelpCircle
 } from 'lucide-react';
+import { toast } from 'sonner';
 
 const Onboarding = () => {
   const [step, setStep] = useState(1);
+  const [userVerification, setUserVerification] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const totalSteps = 4;
+  const { user } = useAuth();
+  const navigate = useNavigate();
   
-  const handleNext = () => {
+  useEffect(() => {
+    async function fetchUserVerificationStatus() {
+      if (!user) return;
+      
+      try {
+        const { data, error } = await supabase
+          .from('user_verification')
+          .select('*')
+          .eq('user_id', user.id)
+          .single();
+        
+        if (error) throw error;
+        
+        setUserVerification(data);
+        
+        if (data) {
+          setStep(data.verification_step || 1);
+        }
+      } catch (error) {
+        console.error('Error fetching user verification status:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    fetchUserVerificationStatus();
+  }, [user]);
+  
+  const handleNext = async () => {
+    if (!user || !userVerification) return;
+    
     if (step < totalSteps) {
-      setStep(step + 1);
-      window.scrollTo(0, 0);
+      try {
+        const { error } = await supabase
+          .from('user_verification')
+          .update({
+            verification_step: step + 1,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('user_id', user.id);
+          
+        if (error) throw error;
+        
+        setStep(step + 1);
+        setUserVerification({
+          ...userVerification,
+          verification_step: step + 1
+        });
+        window.scrollTo(0, 0);
+      } catch (error: any) {
+        toast.error(error.message || 'Failed to update verification status');
+      }
     } else {
-      // Completed onboarding
-      window.location.href = '/dashboard';
+      try {
+        const { error } = await supabase
+          .from('user_verification')
+          .update({
+            verification_step: totalSteps,
+            is_risk_profile_completed: true,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('user_id', user.id);
+          
+        if (error) throw error;
+        
+        toast.success('Onboarding completed successfully!');
+        navigate('/dashboard');
+      } catch (error: any) {
+        toast.error(error.message || 'Failed to update verification status');
+      }
     }
   };
   
@@ -40,17 +109,21 @@ const Onboarding = () => {
   const renderStepContent = () => {
     switch (step) {
       case 1:
-        return <PersonalInformation />;
+        return <PersonalInformation userId={user?.id} />;
       case 2:
-        return <IdentityVerification />;
+        return <IdentityVerification userId={user?.id} />;
       case 3:
-        return <RiskAssessment />;
+        return <RiskAssessment userId={user?.id} />;
       case 4:
-        return <BankInformation />;
+        return <BankInformation userId={user?.id} />;
       default:
         return null;
     }
   };
+  
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
   
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
@@ -122,7 +195,81 @@ const Onboarding = () => {
   );
 };
 
-const PersonalInformation = () => {
+const PersonalInformation = ({ userId }: { userId: string | undefined }) => {
+  const [formData, setFormData] = useState({
+    address: '',
+    city: '',
+    state: '',
+    zipcode: '',
+    dob: '',
+    gender: '',
+    nationality: ''
+  });
+  const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchUserProfile() {
+      if (!userId) return;
+
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', userId)
+          .single();
+
+        if (error) throw error;
+
+        if (data) {
+          setFormData({
+            address: data.address || '',
+            city: data.city || '',
+            state: data.state || '',
+            zipcode: data.zipcode || '',
+            dob: data.dob || '',
+            gender: data.gender || '',
+            nationality: data.nationality || ''
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      } finally {
+        setInitialLoading(false);
+      }
+    }
+
+    fetchUserProfile();
+  }, [userId]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
+  };
+
+  const handleBlur = async (field: string, value: string) => {
+    if (!userId) return;
+
+    try {
+      setLoading(true);
+      const { error } = await supabase
+        .from('profiles')
+        .update({ [field]: value })
+        .eq('id', userId);
+
+      if (error) throw error;
+    } catch (error) {
+      console.error(`Error updating ${field}:`, error);
+      toast.error(`Failed to save ${field}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (initialLoading) {
+    return <div className="p-4 text-center">Loading your information...</div>;
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center space-x-4 mb-6">
@@ -138,27 +285,62 @@ const PersonalInformation = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
           <Label htmlFor="address">Street Address</Label>
-          <Input id="address" placeholder="Enter your street address" />
+          <Input 
+            id="address" 
+            placeholder="Enter your street address"
+            value={formData.address}
+            onChange={handleChange}
+            onBlur={(e) => handleBlur('address', e.target.value)}
+            disabled={loading}
+          />
         </div>
         
         <div className="space-y-2">
           <Label htmlFor="city">City</Label>
-          <Input id="city" placeholder="Enter your city" />
+          <Input 
+            id="city" 
+            placeholder="Enter your city"
+            value={formData.city}
+            onChange={handleChange}
+            onBlur={(e) => handleBlur('city', e.target.value)}
+            disabled={loading}
+          />
         </div>
         
         <div className="space-y-2">
           <Label htmlFor="state">State</Label>
-          <Input id="state" placeholder="Enter your state" />
+          <Input 
+            id="state" 
+            placeholder="Enter your state"
+            value={formData.state}
+            onChange={handleChange}
+            onBlur={(e) => handleBlur('state', e.target.value)}
+            disabled={loading}
+          />
         </div>
         
         <div className="space-y-2">
           <Label htmlFor="zipcode">Postal Code</Label>
-          <Input id="zipcode" placeholder="Enter postal code" />
+          <Input 
+            id="zipcode" 
+            placeholder="Enter postal code"
+            value={formData.zipcode}
+            onChange={handleChange}
+            onBlur={(e) => handleBlur('zipcode', e.target.value)}
+            disabled={loading}
+          />
         </div>
         
         <div className="md:col-span-2 space-y-2">
           <Label htmlFor="dob">Date of Birth</Label>
-          <Input id="dob" type="date" />
+          <Input 
+            id="dob" 
+            type="date" 
+            value={formData.dob}
+            onChange={handleChange}
+            onBlur={(e) => handleBlur('dob', e.target.value)}
+            disabled={loading}
+          />
         </div>
         
         <div className="space-y-2">
@@ -166,6 +348,10 @@ const PersonalInformation = () => {
           <select 
             id="gender"
             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            value={formData.gender}
+            onChange={handleChange}
+            onBlur={(e) => handleBlur('gender', e.target.value)}
+            disabled={loading}
           >
             <option value="">Select gender</option>
             <option value="male">Male</option>
@@ -176,14 +362,21 @@ const PersonalInformation = () => {
         
         <div className="space-y-2">
           <Label htmlFor="nationality">Nationality</Label>
-          <Input id="nationality" placeholder="Enter your nationality" />
+          <Input 
+            id="nationality" 
+            placeholder="Enter your nationality"
+            value={formData.nationality}
+            onChange={handleChange}
+            onBlur={(e) => handleBlur('nationality', e.target.value)}
+            disabled={loading}
+          />
         </div>
       </div>
     </div>
   );
 };
 
-const IdentityVerification = () => {
+const IdentityVerification = ({ userId }: { userId: string | undefined }) => {
   return (
     <div className="space-y-6">
       <div className="flex items-center space-x-4 mb-6">
@@ -246,7 +439,7 @@ const IdentityVerification = () => {
   );
 };
 
-const RiskAssessment = () => {
+const RiskAssessment = ({ userId }: { userId: string | undefined }) => {
   const [answers, setAnswers] = useState({
     investmentGoals: '',
     timeHorizon: '',
@@ -260,6 +453,21 @@ const RiskAssessment = () => {
       ...answers,
       [question]: answer
     });
+    
+    if (userId) {
+      updateRiskProfile(question, answer);
+    }
+  };
+  
+  const updateRiskProfile = async (field: string, value: string) => {
+    try {
+      await supabase
+        .from('profiles')
+        .update({ [`risk_${field}`]: value })
+        .eq('id', userId);
+    } catch (error) {
+      console.error('Error updating risk profile:', error);
+    }
   };
   
   return (
@@ -378,7 +586,7 @@ const RiskAssessment = () => {
   );
 };
 
-const BankInformation = () => {
+const BankInformation = ({ userId }: { userId: string | undefined }) => {
   return (
     <div className="space-y-6">
       <div className="flex items-center space-x-4 mb-6">

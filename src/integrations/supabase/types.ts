@@ -9,7 +9,81 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          bvn: string | null
+          created_at: string
+          first_name: string | null
+          id: string
+          id_number: string | null
+          id_type: string | null
+          last_name: string | null
+          phone_number: string | null
+          risk_profile: string | null
+          updated_at: string
+        }
+        Insert: {
+          bvn?: string | null
+          created_at?: string
+          first_name?: string | null
+          id: string
+          id_number?: string | null
+          id_type?: string | null
+          last_name?: string | null
+          phone_number?: string | null
+          risk_profile?: string | null
+          updated_at?: string
+        }
+        Update: {
+          bvn?: string | null
+          created_at?: string
+          first_name?: string | null
+          id?: string
+          id_number?: string | null
+          id_type?: string | null
+          last_name?: string | null
+          phone_number?: string | null
+          risk_profile?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_verification: {
+        Row: {
+          created_at: string
+          id: string
+          is_email_verified: boolean | null
+          is_kyc_verified: boolean | null
+          is_phone_verified: boolean | null
+          is_risk_profile_completed: boolean | null
+          updated_at: string
+          user_id: string
+          verification_step: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_email_verified?: boolean | null
+          is_kyc_verified?: boolean | null
+          is_phone_verified?: boolean | null
+          is_risk_profile_completed?: boolean | null
+          updated_at?: string
+          user_id: string
+          verification_step?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_email_verified?: boolean | null
+          is_kyc_verified?: boolean | null
+          is_phone_verified?: boolean | null
+          is_risk_profile_completed?: boolean | null
+          updated_at?: string
+          user_id?: string
+          verification_step?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
