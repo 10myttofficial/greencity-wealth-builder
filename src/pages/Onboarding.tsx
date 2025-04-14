@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -18,6 +17,7 @@ import {
   HelpCircle
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { safeAccess } from '@/utils/typeUtils';
 
 const Onboarding = () => {
   const [step, setStep] = useState(1);
@@ -214,12 +214,10 @@ const PersonalInformation = ({ userId }: { userId: string | undefined }) => {
       if (!userId) return;
 
       try {
-        // First, check if we need to add the missing columns to the profiles table
         const { error: columnsError } = await supabase.rpc('ensure_profile_columns');
         
         if (columnsError) console.error('Error ensuring columns:', columnsError);
         
-        // Now fetch the profile data
         const { data, error } = await supabase
           .from('profiles')
           .select('*')
@@ -230,13 +228,13 @@ const PersonalInformation = ({ userId }: { userId: string | undefined }) => {
 
         if (data) {
           setFormData({
-            address: data.address || '',
-            city: data.city || '',
-            state: data.state || '',
-            zipcode: data.zipcode || '',
-            dob: data.dob || '',
-            gender: data.gender || '',
-            nationality: data.nationality || ''
+            address: safeAccess(data, 'address', ''),
+            city: safeAccess(data, 'city', ''),
+            state: safeAccess(data, 'state', ''),
+            zipcode: safeAccess(data, 'zipcode', ''),
+            dob: safeAccess(data, 'dob', ''),
+            gender: safeAccess(data, 'gender', ''),
+            nationality: safeAccess(data, 'nationality', '')
           });
         }
       } catch (error) {

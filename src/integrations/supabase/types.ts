@@ -11,40 +11,61 @@ export type Database = {
     Tables: {
       profiles: {
         Row: {
+          address: string | null
           bvn: string | null
+          city: string | null
           created_at: string
+          dob: string | null
           first_name: string | null
+          gender: string | null
           id: string
           id_number: string | null
           id_type: string | null
           last_name: string | null
+          nationality: string | null
           phone_number: string | null
           risk_profile: string | null
+          state: string | null
           updated_at: string
+          zipcode: string | null
         }
         Insert: {
+          address?: string | null
           bvn?: string | null
+          city?: string | null
           created_at?: string
+          dob?: string | null
           first_name?: string | null
+          gender?: string | null
           id: string
           id_number?: string | null
           id_type?: string | null
           last_name?: string | null
+          nationality?: string | null
           phone_number?: string | null
           risk_profile?: string | null
+          state?: string | null
           updated_at?: string
+          zipcode?: string | null
         }
         Update: {
+          address?: string | null
           bvn?: string | null
+          city?: string | null
           created_at?: string
+          dob?: string | null
           first_name?: string | null
+          gender?: string | null
           id?: string
           id_number?: string | null
           id_type?: string | null
           last_name?: string | null
+          nationality?: string | null
           phone_number?: string | null
           risk_profile?: string | null
+          state?: string | null
           updated_at?: string
+          zipcode?: string | null
         }
         Relationships: []
       }
@@ -89,7 +110,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      ensure_profile_columns: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
