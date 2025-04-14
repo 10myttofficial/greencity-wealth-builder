@@ -14,6 +14,11 @@ import NotFound from "./pages/NotFound";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import VerifyEmail from "./pages/VerifyEmail";
+import Products from "./pages/Products";
+import MutualFunds from "./pages/products/MutualFunds";
+import TreasuryLinkedNotes from "./pages/products/TreasuryLinkedNotes";
+import PortfolioManagement from "./pages/products/PortfolioManagement";
+import FixedIncome from "./pages/products/FixedIncome";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
@@ -28,6 +33,11 @@ const AppRoutes = () => (
     <Route path="/forgot-password" element={<ForgotPassword />} />
     <Route path="/reset-password" element={<ResetPassword />} />
     <Route path="/verify-email" element={<VerifyEmail />} />
+    <Route path="/products" element={<Products />} />
+    <Route path="/products/mutual-funds" element={<MutualFunds />} />
+    <Route path="/products/treasury-linked-notes" element={<TreasuryLinkedNotes />} />
+    <Route path="/products/portfolio-management" element={<PortfolioManagement />} />
+    <Route path="/products/fixed-income" element={<FixedIncome />} />
     <Route path="/onboarding" element={
       <ProtectedRoute>
         <Onboarding />
