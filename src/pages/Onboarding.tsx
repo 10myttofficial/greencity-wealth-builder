@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -213,6 +214,12 @@ const PersonalInformation = ({ userId }: { userId: string | undefined }) => {
       if (!userId) return;
 
       try {
+        // First, check if we need to add the missing columns to the profiles table
+        const { error: columnsError } = await supabase.rpc('ensure_profile_columns');
+        
+        if (columnsError) console.error('Error ensuring columns:', columnsError);
+        
+        // Now fetch the profile data
         const { data, error } = await supabase
           .from('profiles')
           .select('*')
