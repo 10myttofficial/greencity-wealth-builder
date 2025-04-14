@@ -58,7 +58,7 @@ const Hero = () => {
           <div className="relative hidden md:block">
             <div className="rounded-3xl overflow-hidden shadow-2xl bg-white p-2">
               <img 
-                src="https://unsplash.com/photos/green-plant-on-brown-round-coins-lZ_4nPFKcV8" 
+                src="https://github.com/10myttofficial/greencity-wealth-builder/public/micheile-henderson-lZ_4nPFKcV8-unsplash.jpg" 
                 alt="Financial planning" 
                 className="rounded-2xl w-full h-[500px] object-cover"
               />
