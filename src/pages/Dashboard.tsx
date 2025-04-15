@@ -5,6 +5,7 @@ import QuickActions from '@/components/dashboard/QuickActions';
 import PortfolioSummary from '@/components/dashboard/PortfolioSummary';
 import ActiveInvestments from '@/components/dashboard/ActiveInvestments';
 import MarketInsights from '@/components/dashboard/MarketInsights';
+import FloatingChatButton from '@/components/chat/FloatingChatButton';
 import { Button } from '@/components/ui/button';
 import { LogOut, Settings } from 'lucide-react';
 
@@ -52,6 +53,8 @@ const Dashboard = () => {
           </div>
         </div>
       </main>
+      
+      <FloatingChatButton />
     </div>
   );
 };

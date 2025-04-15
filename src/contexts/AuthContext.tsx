@@ -5,10 +5,16 @@ import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
+interface UserRole {
+  role: string;
+}
+
 interface AuthContextType {
   session: Session | null;
   user: User | null;
   loading: boolean;
+  userRoles: string[];
+  hasRole: (role: string) => boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, userData: any) => Promise<void>;
   signOut: () => Promise<void>;
@@ -22,6 +28,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [userRoles, setUserRoles] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -32,11 +39,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setSession(session);
         setUser(session?.user ?? null);
         
-        // If user just signed in, check their verification status
+        // If user just signed in, check their verification status and roles
         if (event === 'SIGNED_IN' && session?.user) {
           setTimeout(() => {
             checkUserVerificationStatus(session.user.id);
+            fetchUserRoles(session.user.id);
           }, 0);
+        }
+        
+        if (event === 'SIGNED_OUT') {
+          setUserRoles([]);
         }
       }
     );
@@ -47,6 +59,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(session?.user ?? null);
       if (session?.user) {
         checkUserVerificationStatus(session.user.id);
+        fetchUserRoles(session.user.id);
       }
       setLoading(false);
     });
@@ -55,6 +68,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       subscription.unsubscribe();
     };
   }, [navigate]);
+
+  const fetchUserRoles = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', userId);
+        
+      if (error) {
+        console.error('Error fetching user roles:', error);
+        return;
+      }
+      
+      if (data) {
+        const roles = data.map(role => role.role);
+        setUserRoles(roles);
+      }
+    } catch (error) {
+      console.error('Error in fetch user roles:', error);
+    }
+  };
+  
+  const hasRole = (role: string) => {
+    return userRoles.includes(role);
+  };
 
   const checkUserVerificationStatus = async (userId: string) => {
     try {
@@ -257,6 +295,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         session,
         user,
         loading,
+        userRoles,
+        hasRole,
         signIn,
         signUp,
         signOut,

@@ -26,6 +26,7 @@ import Contact from "./pages/Contact";
 import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import CookiePolicy from "./pages/CookiePolicy";
+import ChatSupport from "./pages/ChatSupport";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
@@ -56,6 +57,11 @@ const AppRoutes = () => (
     <Route path="/terms" element={<TermsOfService />} />
     <Route path="/privacy" element={<PrivacyPolicy />} />
     <Route path="/cookies" element={<CookiePolicy />} />
+    <Route path="/chat-support" element={
+      <ProtectedRoute>
+        <ChatSupport />
+      </ProtectedRoute>
+    } />
     <Route path="/onboarding" element={
       <ProtectedRoute>
         <Onboarding />
