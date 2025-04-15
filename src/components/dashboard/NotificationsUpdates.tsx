@@ -1,7 +1,9 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Bell, CheckCircle2, Calendar, RefreshCw } from 'lucide-react';
+import { Bell, CheckCircle2, Calendar, RefreshCw, AlertTriangle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 const notifications = [
   {
@@ -24,17 +26,32 @@ const notifications = [
     icon: RefreshCw,
     iconColor: 'text-green-500',
     bgColor: 'bg-green-50'
+  },
+  {
+    id: 4,
+    message: 'Compliance review required',
+    icon: AlertTriangle,
+    iconColor: 'text-red-500',
+    bgColor: 'bg-red-50'
   }
 ];
 
 const NotificationsUpdates = () => {
   return (
     <Card className="border-gray-100">
-      <CardHeader className="pb-2">
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="flex items-center text-xl">
           <Bell className="mr-2 h-5 w-5 text-greencity-500" />
           Notifications & Updates
         </CardTitle>
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="text-xs text-greencity-600 hover:text-greencity-700"
+          asChild
+        >
+          <Link to="/admin">Admin Panel</Link>
+        </Button>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
