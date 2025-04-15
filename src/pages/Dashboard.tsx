@@ -1,59 +1,47 @@
 
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import QuickActions from '@/components/dashboard/QuickActions';
-import PortfolioSummary from '@/components/dashboard/PortfolioSummary';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
+import WelcomeBanner from '@/components/dashboard/WelcomeBanner';
+import PortfolioSnapshot from '@/components/dashboard/PortfolioSnapshot';
 import ActiveInvestments from '@/components/dashboard/ActiveInvestments';
-import MarketInsights from '@/components/dashboard/MarketInsights';
+import AiAssistant from '@/components/dashboard/AiAssistant';
+import RecentTransactions from '@/components/dashboard/RecentTransactions';
+import PortfolioHealth from '@/components/dashboard/PortfolioHealth';
+import LearningHubHighlights from '@/components/dashboard/LearningHubHighlights';
+import NotificationsUpdates from '@/components/dashboard/NotificationsUpdates';
+import QuickActions from '@/components/dashboard/QuickActions';
 import FloatingChatButton from '@/components/chat/FloatingChatButton';
-import { Button } from '@/components/ui/button';
-import { LogOut, Settings } from 'lucide-react';
 
 const Dashboard = () => {
-  const { user, signOut, loading } = useAuth();
+  const { user } = useAuth();
   
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 py-4">
-        <div className="container mx-auto px-4 flex justify-between items-center">
-          <div className="flex items-center">
-            <span className="text-2xl font-playfair font-bold text-greencity-500">Green<span className="text-gold-500">City</span></span>
-          </div>
-          <div className="flex space-x-2">
-            <Button variant="ghost" size="sm">
-              <Settings size={18} className="mr-1" /> Settings
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={signOut}
-              disabled={loading}
-            >
-              <LogOut size={18} className="mr-1" /> Sign Out
-            </Button>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      <Navbar />
       
-      <main className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold">Hi, {user?.user_metadata?.first_name || 'there'}!</h1>
-          <p className="text-gray-500">Welcome to your financial dashboard</p>
-        </div>
+      <main className="flex-grow container mx-auto px-4 py-6 md:py-8">
+        <WelcomeBanner user={user} />
         
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-          <div className="md:col-span-4 space-y-6">
-            <QuickActions />
-            <MarketInsights />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+          <div className="lg:col-span-2 space-y-6">
+            <PortfolioSnapshot />
+            <ActiveInvestments />
+            <RecentTransactions />
           </div>
           
-          <div className="md:col-span-8 space-y-6">
-            <PortfolioSummary />
-            <ActiveInvestments />
+          <div className="space-y-6">
+            <AiAssistant />
+            <PortfolioHealth />
+            <NotificationsUpdates />
+            <QuickActions />
+            <LearningHubHighlights />
           </div>
         </div>
       </main>
       
+      <Footer />
       <FloatingChatButton />
     </div>
   );

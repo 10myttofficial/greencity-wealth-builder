@@ -1,60 +1,78 @@
 
 import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { PlusCircle, ArrowUpRight, Search, Wallet } from 'lucide-react';
+import { PlusCircle, RefreshCw, LineChart, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const QuickActions = () => {
+  const actions = [
+    {
+      id: 1,
+      name: 'Add New Investment',
+      icon: PlusCircle,
+      link: '/products',
+      color: 'text-green-500'
+    },
+    {
+      id: 2,
+      name: 'Set Auto-Reinvest',
+      icon: RefreshCw,
+      link: '/portfolio',
+      color: 'text-blue-500'
+    },
+    {
+      id: 3,
+      name: 'Update Risk Profile',
+      icon: LineChart,
+      link: '/profile',
+      color: 'text-amber-500'
+    },
+    {
+      id: 4,
+      name: 'Download Statement',
+      icon: Download,
+      link: '#',
+      color: 'text-purple-500',
+      onClick: () => console.log('Download statement')
+    }
+  ];
+
   return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-bold">Quick Actions</h2>
-      
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Button 
-          variant="outline" 
-          className="flex-col h-24 border-dashed border-gray-300 hover:border-greencity-500 hover:bg-greencity-50"
-          asChild
-        >
-          <Link to="/invest">
-            <PlusCircle className="h-6 w-6 mb-2 text-greencity-500" />
-            <span>New Investment</span>
-          </Link>
-        </Button>
-        
-        <Button 
-          variant="outline" 
-          className="flex-col h-24 border-dashed border-gray-300 hover:border-greencity-500 hover:bg-greencity-50"
-          asChild
-        >
-          <Link to="/wallet/fund">
-            <ArrowUpRight className="h-6 w-6 mb-2 text-greencity-500" />
-            <span>Fund Wallet</span>
-          </Link>
-        </Button>
-        
-        <Button 
-          variant="outline" 
-          className="flex-col h-24 border-dashed border-gray-300 hover:border-greencity-500 hover:bg-greencity-50"
-          asChild
-        >
-          <Link to="/products">
-            <Search className="h-6 w-6 mb-2 text-greencity-500" />
-            <span>Explore Products</span>
-          </Link>
-        </Button>
-        
-        <Button 
-          variant="outline" 
-          className="flex-col h-24 border-dashed border-gray-300 hover:border-greencity-500 hover:bg-greencity-50"
-          asChild
-        >
-          <Link to="/wallet">
-            <Wallet className="h-6 w-6 mb-2 text-greencity-500" />
-            <span>My Wallet</span>
-          </Link>
-        </Button>
-      </div>
-    </div>
+    <Card className="border-gray-100">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-xl">Quick Actions</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-2 gap-3">
+          {actions.map(action => (
+            action.onClick ? (
+              <Button
+                key={action.id}
+                variant="outline"
+                className="h-auto py-4 flex flex-col items-center justify-center text-center border-gray-200 hover:border-greencity-500 hover:text-greencity-500"
+                onClick={action.onClick}
+              >
+                <action.icon className={`h-5 w-5 mb-2 ${action.color}`} />
+                <span className="text-sm">{action.name}</span>
+              </Button>
+            ) : (
+              <Button
+                key={action.id}
+                variant="outline"
+                className="h-auto py-4 flex flex-col items-center justify-center text-center border-gray-200 hover:border-greencity-500 hover:text-greencity-500"
+                asChild
+              >
+                <Link to={action.link}>
+                  <action.icon className={`h-5 w-5 mb-2 ${action.color}`} />
+                  <span className="text-sm">{action.name}</span>
+                </Link>
+              </Button>
+            )
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
