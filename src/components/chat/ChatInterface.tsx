@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -28,15 +27,12 @@ const ChatInterface = () => {
   const [showOptions, setShowOptions] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Fetch chat history
   useEffect(() => {
     const fetchMessages = async () => {
       if (!user) return;
       
       setIsLoading(true);
       try {
-        // In a real implementation, you would fetch messages from your database
-        // This is a placeholder that simulates a welcome message
         const welcomeMessage: Message = {
           id: 'welcome',
           content: 'Welcome to GreenCity Support! How can we help you today?',
@@ -57,7 +53,6 @@ const ChatInterface = () => {
     fetchMessages();
   }, [user]);
 
-  // Scroll to bottom when messages change
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
@@ -81,7 +76,6 @@ const ChatInterface = () => {
     setMessage('');
     setShowOptions(false);
 
-    // Simulate response after a delay
     setTimeout(() => {
       const supportResponse: Message = {
         id: `support-${Date.now()}`,
@@ -109,7 +103,6 @@ const ChatInterface = () => {
 
   return (
     <div className="h-full flex flex-col">
-      {/* Chat header */}
       <div className="bg-greencity-500 text-white p-4 flex items-center justify-between">
         <div className="flex items-center">
           <Avatar className="mr-3">
@@ -128,7 +121,6 @@ const ChatInterface = () => {
         </div>
       </div>
 
-      {/* Chat messages */}
       <div className="flex-grow overflow-y-auto p-4">
         {isLoading ? (
           <div className="flex justify-center py-10">
@@ -144,12 +136,10 @@ const ChatInterface = () => {
         )}
       </div>
 
-      {/* Support options */}
       {showOptions && messages.length === 1 && (
         <SupportOptions onOptionSelect={handleOptionSelect} />
       )}
 
-      {/* Chat input */}
       <div className="border-t p-3 bg-white">
         <div className="flex items-end space-x-2">
           <div className="flex-grow">
@@ -159,7 +149,6 @@ const ChatInterface = () => {
               onKeyDown={handleKeyPress}
               placeholder="Type your message here..."
               className="resize-none min-h-[60px]"
-              maxRows={4}
             />
           </div>
           <Button 
