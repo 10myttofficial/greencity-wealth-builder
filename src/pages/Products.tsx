@@ -65,7 +65,7 @@ const Products = () => {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Durations</SelectItem>
-                      <SelectItem value="short">Short Term (< 1 year)</SelectItem>
+                      <SelectItem value="short">Short Term (&lt; 1 year)</SelectItem>
                       <SelectItem value="medium">Medium Term (1-3 years)</SelectItem>
                       <SelectItem value="long">Long Term (3+ years)</SelectItem>
                     </SelectContent>
