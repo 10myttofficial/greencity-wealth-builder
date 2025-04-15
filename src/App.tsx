@@ -19,6 +19,10 @@ import MutualFunds from "./pages/products/MutualFunds";
 import TreasuryLinkedNotes from "./pages/products/TreasuryLinkedNotes";
 import PortfolioManagement from "./pages/products/PortfolioManagement";
 import FixedIncome from "./pages/products/FixedIncome";
+import Portfolio from "./pages/Portfolio";
+import LearningHub from "./pages/LearningHub";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
@@ -38,6 +42,14 @@ const AppRoutes = () => (
     <Route path="/products/treasury-linked-notes" element={<TreasuryLinkedNotes />} />
     <Route path="/products/portfolio-management" element={<PortfolioManagement />} />
     <Route path="/products/fixed-income" element={<FixedIncome />} />
+    <Route path="/portfolio" element={
+      <ProtectedRoute>
+        <Portfolio />
+      </ProtectedRoute>
+    } />
+    <Route path="/learn" element={<LearningHub />} />
+    <Route path="/about" element={<About />} />
+    <Route path="/contact" element={<Contact />} />
     <Route path="/onboarding" element={
       <ProtectedRoute>
         <Onboarding />
