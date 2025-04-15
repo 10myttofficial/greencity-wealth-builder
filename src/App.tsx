@@ -23,6 +23,9 @@ import Portfolio from "./pages/Portfolio";
 import LearningHub from "./pages/LearningHub";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import TermsOfService from "./pages/TermsOfService";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import CookiePolicy from "./pages/CookiePolicy";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
@@ -50,6 +53,9 @@ const AppRoutes = () => (
     <Route path="/learn" element={<LearningHub />} />
     <Route path="/about" element={<About />} />
     <Route path="/contact" element={<Contact />} />
+    <Route path="/terms" element={<TermsOfService />} />
+    <Route path="/privacy" element={<PrivacyPolicy />} />
+    <Route path="/cookies" element={<CookiePolicy />} />
     <Route path="/onboarding" element={
       <ProtectedRoute>
         <Onboarding />

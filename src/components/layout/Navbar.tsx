@@ -9,6 +9,14 @@ import {
   X
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -37,12 +45,66 @@ const Navbar = () => {
             About Us
           </Link>
           <div className="flex items-center space-x-2">
-            <Button variant="ghost" size="icon" className="text-gray-700 hover:text-greencity-500">
-              <Bell size={20} />
-            </Button>
-            <Button variant="ghost" size="icon" className="text-gray-700 hover:text-greencity-500">
-              <User size={20} />
-            </Button>
+            {/* Notifications Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="text-gray-700 hover:text-greencity-500 relative">
+                  <Bell size={20} />
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">3</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-80">
+                <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <div className="max-h-[300px] overflow-y-auto">
+                  <NotificationItem 
+                    title="Portfolio Update" 
+                    description="Your Balanced Mutual Fund has grown by 2.5% this month." 
+                    time="10 minutes ago" 
+                  />
+                  <NotificationItem 
+                    title="Maturity Alert" 
+                    description="Your Treasury Linked Note will mature in 3 days." 
+                    time="2 hours ago" 
+                  />
+                  <NotificationItem 
+                    title="New Investment Opportunity" 
+                    description="Check out our new Fixed Income product with 12% annual returns." 
+                    time="Yesterday" 
+                  />
+                </div>
+                <DropdownMenuSeparator />
+                <div className="p-2">
+                  <Button variant="outline" className="w-full">View All Notifications</Button>
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            
+            {/* User Profile Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="text-gray-700 hover:text-greencity-500">
+                  <User size={20} />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link to="/dashboard" className="cursor-pointer">Dashboard</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/portfolio" className="cursor-pointer">My Portfolio</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/profile" className="cursor-pointer">Profile Settings</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <span className="cursor-pointer text-red-500">Sign Out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </nav>
 
@@ -92,8 +154,9 @@ const Navbar = () => {
               About Us
             </Link>
             <div className="flex space-x-4 py-2">
-              <Button variant="ghost" size="icon" className="text-gray-700">
+              <Button variant="ghost" size="icon" className="text-gray-700 relative">
                 <Bell size={20} />
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">3</span>
               </Button>
               <Button variant="ghost" size="icon" className="text-gray-700">
                 <User size={20} />
@@ -105,5 +168,16 @@ const Navbar = () => {
     </header>
   );
 };
+
+// Helper component for notification items
+const NotificationItem = ({ title, description, time }: { title: string, description: string, time: string }) => (
+  <div className="px-2 py-3 hover:bg-gray-100 transition-colors cursor-pointer">
+    <div className="flex justify-between items-start">
+      <h5 className="font-medium text-sm">{title}</h5>
+      <span className="text-xs text-gray-500">{time}</span>
+    </div>
+    <p className="text-xs text-gray-600 mt-1">{description}</p>
+  </div>
+);
 
 export default Navbar;
