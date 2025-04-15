@@ -74,7 +74,13 @@ const LearningHub = () => {
                   <p className="text-gray-500 mb-6">
                     Bookmark articles, lessons, and quizzes to access them later
                   </p>
-                  <Button onClick={() => document.querySelector('[data-value="categories"]')?.click()}>
+                  <Button onClick={() => {
+                    // Fix: Use querySelector to get the element and then check if it exists before clicking
+                    const categoriesTab = document.querySelector('[data-value="categories"]') as HTMLElement;
+                    if (categoriesTab) {
+                      categoriesTab.click();
+                    }
+                  }}>
                     Browse Content
                   </Button>
                 </div>
