@@ -1,12 +1,13 @@
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   Menu,
   Bell,
   User,
   ChevronDown,
-  X
+  X,
+  LogOut
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,9 +18,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAuth } from '@/contexts/AuthContext';
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, signOut, userRoles, loading } = useAuth();
+  const navigate = useNavigate();
+  
+  const handleSignOut = async () => {
+    await signOut();
+  };
+  
+  const isAdmin = user && (userRoles.includes('admin') || user?.email === "admin@greencity.com");
 
   return (
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-200">
@@ -45,40 +55,44 @@ const Navbar = () => {
             About Us
           </Link>
           <div className="flex items-center space-x-2">
-            {/* Notifications Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-gray-700 hover:text-greencity-500 relative">
-                  <Bell size={20} />
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">3</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-80">
-                <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <div className="max-h-[300px] overflow-y-auto">
-                  <NotificationItem 
-                    title="Portfolio Update" 
-                    description="Your Balanced Mutual Fund has grown by 2.5% this month." 
-                    time="10 minutes ago" 
-                  />
-                  <NotificationItem 
-                    title="Maturity Alert" 
-                    description="Your Treasury Linked Note will mature in 3 days." 
-                    time="2 hours ago" 
-                  />
-                  <NotificationItem 
-                    title="New Investment Opportunity" 
-                    description="Check out our new Fixed Income product with 12% annual returns." 
-                    time="Yesterday" 
-                  />
-                </div>
-                <DropdownMenuSeparator />
-                <div className="p-2">
-                  <Button variant="outline" className="w-full">View All Notifications</Button>
-                </div>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {user && (
+              <>
+                {/* Notifications Dropdown */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="text-gray-700 hover:text-greencity-500 relative">
+                      <Bell size={20} />
+                      <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">3</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-80 bg-white">
+                    <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <div className="max-h-[300px] overflow-y-auto">
+                      <NotificationItem 
+                        title="Portfolio Update" 
+                        description="Your Balanced Mutual Fund has grown by 2.5% this month." 
+                        time="10 minutes ago" 
+                      />
+                      <NotificationItem 
+                        title="Maturity Alert" 
+                        description="Your Treasury Linked Note will mature in 3 days." 
+                        time="2 hours ago" 
+                      />
+                      <NotificationItem 
+                        title="New Investment Opportunity" 
+                        description="Check out our new Fixed Income product with 12% annual returns." 
+                        time="Yesterday" 
+                      />
+                    </div>
+                    <DropdownMenuSeparator />
+                    <div className="p-2">
+                      <Button variant="outline" className="w-full">View All Notifications</Button>
+                    </div>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
+            )}
             
             {/* User Profile Dropdown */}
             <DropdownMenu>
@@ -87,22 +101,41 @@ const Navbar = () => {
                   <User size={20} />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link to="/dashboard" className="cursor-pointer">Dashboard</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/portfolio" className="cursor-pointer">My Portfolio</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/profile" className="cursor-pointer">Profile Settings</Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <span className="cursor-pointer text-red-500">Sign Out</span>
-                </DropdownMenuItem>
+              <DropdownMenuContent align="end" className="bg-white">
+                {user ? (
+                  <>
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link to="/dashboard" className="cursor-pointer">Dashboard</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/portfolio" className="cursor-pointer">My Portfolio</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/profile" className="cursor-pointer">Profile Settings</Link>
+                    </DropdownMenuItem>
+                    {isAdmin && (
+                      <DropdownMenuItem asChild>
+                        <Link to="/admin" className="cursor-pointer">Admin Dashboard</Link>
+                      </DropdownMenuItem>
+                    )}
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-red-500">
+                      <LogOut size={16} className="mr-2" />
+                      Sign Out
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link to="/signin" className="cursor-pointer">Sign In</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/signup" className="cursor-pointer">Sign Up</Link>
+                    </DropdownMenuItem>
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -154,13 +187,26 @@ const Navbar = () => {
               About Us
             </Link>
             <div className="flex space-x-4 py-2">
-              <Button variant="ghost" size="icon" className="text-gray-700 relative">
-                <Bell size={20} />
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">3</span>
-              </Button>
-              <Button variant="ghost" size="icon" className="text-gray-700">
-                <User size={20} />
-              </Button>
+              {user ? (
+                <>
+                  <Button variant="ghost" size="icon" className="text-gray-700 relative">
+                    <Bell size={20} />
+                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">3</span>
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="text-gray-700"
+                    onClick={handleSignOut}
+                  >
+                    <LogOut size={20} />
+                  </Button>
+                </>
+              ) : (
+                <Link to="/signin" className="text-greencity-500 font-medium">
+                  Sign In
+                </Link>
+              )}
             </div>
           </div>
         </div>
