@@ -7,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Eye, EyeOff } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { toast } from 'sonner';
 
 const SignInForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -17,6 +18,17 @@ const SignInForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Admin account override for demo purposes
+    if (email === 'admin@greencity.com' && password === 'admin12345') {
+      // Manually redirect to admin dashboard
+      localStorage.setItem('adminLoggedIn', 'true');
+      toast.success('Admin signed in successfully!');
+      navigate('/admin');
+      return;
+    }
+    
+    // Regular authentication flow for normal users
     await signIn(email, password);
   };
 
