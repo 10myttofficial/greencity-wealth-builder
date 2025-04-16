@@ -1,10 +1,15 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowRight, MessageCircle } from 'lucide-react';
 
 const Hero = () => {
+  const navigate = useNavigate();
+
+  const handleLiveChat = () => {
+    navigate('/chat-support');
+  };
+
   return (
     <section className="relative bg-gradient-to-r from-gray-50 to-gray-100 py-20 md:py-28 overflow-hidden">
       {/* Abstract shapes in the background */}
@@ -14,6 +19,17 @@ const Hero = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6 text-center md:text-left">
+            {/* Live Chat Button for non-logged in users */}
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={handleLiveChat} 
+              className="absolute top-4 right-4 border-greencity-500 text-greencity-500 hover:bg-greencity-500 hover:text-white"
+            >
+              <MessageCircle size={20} className="mr-2" />
+              Live Chat
+            </Button>
+
             <span className="inline-block py-1 px-3 bg-greencity-50 text-greencity-600 rounded-full text-sm font-medium">
               Sustainable Wealth Creation
             </span>
