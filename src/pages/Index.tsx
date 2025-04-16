@@ -7,7 +7,6 @@ import ProductShowcase from '../components/home/ProductShowcase';
 import Features from '../components/home/Features';
 import Testimonials from '../components/home/Testimonials';
 import CtaSection from '../components/home/CtaSection';
-import FloatingChatButton from '../components/chat/FloatingChatButton';
 
 const Index = () => {
   return (
@@ -21,7 +20,6 @@ const Index = () => {
         <CtaSection />
       </main>
       <Footer />
-      <FloatingChatButton />
     </div>
   );
 };
