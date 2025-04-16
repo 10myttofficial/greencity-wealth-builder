@@ -11,9 +11,14 @@ import CompliancePanel from '@/components/admin/CompliancePanel';
 import AnalyticsPanel from '@/components/admin/AnalyticsPanel';
 import AdminNotifications from '@/components/admin/AdminNotifications';
 import SystemSettings from '@/components/admin/SystemSettings';
+import { toast } from 'sonner';
 
 const AdminDashboard = () => {
-  const { user } = useAuth();
+  const { user, userRoles } = useAuth();
+  
+  React.useEffect(() => {
+    toast.success("Welcome to the Admin Dashboard");
+  }, []);
   
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">

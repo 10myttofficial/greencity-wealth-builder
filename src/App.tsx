@@ -30,6 +30,7 @@ import ChatSupport from "./pages/ChatSupport";
 import AdminDashboard from "./pages/AdminDashboard";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import AdminRoute from "./components/auth/AdminRoute";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -74,9 +75,9 @@ const AppRoutes = () => (
       </ProtectedRoute>
     } />
     <Route path="/admin" element={
-      <ProtectedRoute>
+      <AdminRoute>
         <AdminDashboard />
-      </ProtectedRoute>
+      </AdminRoute>
     } />
     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
     <Route path="*" element={<NotFound />} />
