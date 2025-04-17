@@ -8,7 +8,7 @@ const FloatingChatButton = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="fixed bottom-6 right-6 z-40">
+    <div className="fixed bottom-6 right-6 z-50">
       <Button
         onClick={() => navigate('/chat-support')}
         className="bg-greencity-500 hover:bg-greencity-600 text-white border border-white rounded-full p-4 shadow-lg flex items-center gap-2 transition-all duration-300 hover:scale-105 group"
