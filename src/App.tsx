@@ -10,6 +10,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Onboarding from "./pages/Onboarding";
 import Dashboard from "./pages/Dashboard";
+import DepartmentAdminDashboard from "./pages/DepartmentAdminDashboard";
 import NotFound from "./pages/NotFound";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
@@ -78,6 +79,11 @@ const AppRoutes = () => (
       <AdminRoute>
         <AdminDashboard />
       </AdminRoute>
+    } />
+    <Route path="/department-admin" element={
+      <ProtectedRoute>
+        <DepartmentAdminDashboard />
+      </ProtectedRoute>
     } />
     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
     <Route path="*" element={<NotFound />} />

@@ -77,6 +77,10 @@
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-playfair;
+  }
 }
 
 @layer components {
@@ -87,4 +91,12 @@
   .gold-gradient {
     @apply bg-gradient-to-r from-gold-400 to-gold-600 text-gray-800;
   }
+}
+
+.font-playfair {
+  font-family: 'Playfair Display', serif;
+}
+
+.font-dm-sans {
+  font-family: 'DM Sans', sans-serif;
 }

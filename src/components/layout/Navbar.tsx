@@ -30,6 +30,7 @@ const Navbar = () => {
   };
   
   const isAdmin = user && (userRoles.includes('admin') || user?.email === "admin@greencity.com");
+  const isDepartmentAdmin = user && userRoles.includes('department_admin');
 
   return (
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-200">
@@ -120,6 +121,11 @@ const Navbar = () => {
                         <Link to="/admin" className="cursor-pointer">Admin Dashboard</Link>
                       </DropdownMenuItem>
                     )}
+                    {isDepartmentAdmin && (
+                      <DropdownMenuItem asChild>
+                        <Link to="/department-admin" className="cursor-pointer">Department Admin</Link>
+                      </DropdownMenuItem>
+                    )}
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-red-500">
                       <LogOut size={16} className="mr-2" />
@@ -186,6 +192,15 @@ const Navbar = () => {
             >
               About Us
             </Link>
+            {user && isDepartmentAdmin && (
+              <Link
+                to="/department-admin"
+                className="py-2 text-greencity-500 font-medium"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Department Admin
+              </Link>
+            )}
             <div className="flex space-x-4 py-2">
               {user ? (
                 <>

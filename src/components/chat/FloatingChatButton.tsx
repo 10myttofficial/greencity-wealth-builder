@@ -11,7 +11,7 @@ const FloatingChatButton = () => {
     <div className="fixed bottom-6 right-6 z-40">
       <Button
         onClick={() => navigate('/chat-support')}
-        className="green-gradient rounded-full p-4 shadow-lg flex items-center gap-2 transition-all duration-300 hover:scale-105 group"
+        className="bg-greencity-500 hover:bg-greencity-600 text-white border border-white rounded-full p-4 shadow-lg flex items-center gap-2 transition-all duration-300 hover:scale-105 group"
       >
         <MessageSquare className="text-white h-6 w-6" />
         <span className="text-white font-medium overflow-hidden max-w-0 group-hover:max-w-xs transition-all duration-300 whitespace-nowrap">
