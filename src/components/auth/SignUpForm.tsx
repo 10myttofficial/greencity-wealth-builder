@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -17,6 +16,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from 'sonner';
+
+const generateTemporaryPassword = () => {
+  // Generate a more secure temporary password
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
+  let password = '';
+  for (let i = 0; i < 12; i++) {
+    password += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return password;
+};
 
 const SignUpForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -56,23 +65,34 @@ const SignUpForm = () => {
     setLoading(true);
 
     try {
-      // Register the user
-      await signUp(email, password, {
-        firstName,
-        lastName,
-        phone
-      });
-
+      // If department is selected, create a department admin account
       if (department) {
-        // Fetch the newly created user
-        const { data: userData } = await supabase.auth.getUser();
-        
-        if (userData?.user) {
+        const temporaryPassword = generateTemporaryPassword();
+
+        // Register the user with a temporary password
+        const { data: authData, error: authError } = await supabase.auth.signUp({
+          email,
+          password: temporaryPassword,
+          options: {
+            data: {
+              first_name: firstName,
+              last_name: lastName,
+              require_password_change: true // Force password change on first login
+            }
+          }
+        });
+
+        if (authError) {
+          toast.error(authError.message);
+          return;
+        }
+
+        if (authData.user) {
           // Add department admin role
           const { error: roleError } = await supabase
             .from('user_roles')
             .insert([
-              { user_id: userData.user.id, role: 'department_admin' }
+              { user_id: authData.user.id, role: 'department_admin' }
             ]);
 
           if (roleError) {
@@ -84,7 +104,7 @@ const SignUpForm = () => {
           const { error: deptError } = await supabase
             .from('department_admins')
             .insert([
-              { user_id: userData.user.id, department_id: department }
+              { user_id: authData.user.id, department_id: department }
             ]);
 
           if (deptError) {
@@ -92,9 +112,24 @@ const SignUpForm = () => {
             return;
           }
 
-          toast.success('Department admin account created successfully!');
-          navigate('/department-admin');
+          // Send temporary password notification
+          toast.success(
+            'Department admin account created. Please check your email for login instructions.', 
+            { 
+              duration: 10000,
+              description: 'You will be required to change your password on first login.'
+            }
+          );
+
+          navigate('/signin');
         }
+      } else {
+        // Regular user signup logic (keep existing code)
+        await signUp(email, password, {
+          firstName,
+          lastName,
+          phone
+        });
       }
     } catch (error: any) {
       toast.error(error.message || 'An error occurred during sign up');
