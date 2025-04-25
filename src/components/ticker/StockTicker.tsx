@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowUp, ArrowDown } from 'lucide-react';
 import { cn } from "@/lib/utils";
@@ -22,28 +21,21 @@ export const StockTicker = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
   const [stocks] = useState<StockData[]>(mockStocks);
-  
+
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
-    
-    // Set initial position
-    container.scrollLeft = 0;
-    
+
     const animateTicker = () => {
-      if (isPaused || !container) return;
-      
-      // Increment scroll position
-      container.scrollLeft += 1;
-      
-      // Create seamless loop effect
-      // When we've scrolled half way through the duplicated content,
-      // reset to the beginning without a visible jump
-      if (container.scrollLeft >= container.firstElementChild!.scrollWidth) {
+      if (isPaused) return;
+
+      if (container.scrollLeft >= container.scrollWidth / 2) {
         container.scrollLeft = 0;
+      } else {
+        container.scrollLeft += 1;
       }
     };
-    
+
     const interval = setInterval(animateTicker, 20);
     return () => clearInterval(interval);
   }, [isPaused]);
@@ -61,7 +53,6 @@ export const StockTicker = () => {
             <StockItem key={`${stock.symbol}-${index}`} stock={stock} />
           ))}
         </div>
-        {/* Duplicate content to create seamless scrolling effect */}
         <div className="inline-block">
           {stocks.map((stock, index) => (
             <StockItem key={`${stock.symbol}-${index}-duplicate`} stock={stock} />
