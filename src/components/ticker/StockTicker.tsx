@@ -20,6 +20,7 @@ const mockStocks: StockData[] = [
 
 export const StockTicker = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isPaused, setIsPaused] = useState(false);
   const [stocks] = useState<StockData[]>(mockStocks);
   
   useEffect(() => {
@@ -30,7 +31,7 @@ export const StockTicker = () => {
     container.scrollLeft = 0;
     
     const animateTicker = () => {
-      if (!container) return;
+      if (isPaused || !container) return;
       
       // Increment scroll position
       container.scrollLeft += 1;
@@ -45,13 +46,15 @@ export const StockTicker = () => {
     
     const interval = setInterval(animateTicker, 20);
     return () => clearInterval(interval);
-  }, []);
+  }, [isPaused]);
 
   return (
     <div className="w-full bg-greencity-900 border-b border-greencity-800">
       <div 
         ref={containerRef}
         className="overflow-hidden whitespace-nowrap py-1.5 relative"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
       >
         <div className="inline-block">
           {stocks.map((stock, index) => (
@@ -75,8 +78,7 @@ const StockItem = ({ stock }: { stock: StockData }) => {
 
   return (
     <a
-      href="#"
-      onClick={(e) => e.preventDefault()}
+      href={`/stocks/${stock.symbol}`}
       className="inline-flex items-center px-3 py-0.5 hover:bg-greencity-800/50 transition-colors"
     >
       <span className="font-medium text-white text-sm mr-1.5">{stock.symbol}</span>
