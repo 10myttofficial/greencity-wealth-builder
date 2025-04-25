@@ -21,32 +21,38 @@ const mockStocks: StockData[] = [
 ];
 
 export const StockTicker = () => {
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
   const [stocks] = useState<StockData[]>(mockStocks);
 
   useEffect(() => {
-    const scrollContainer = scrollRef.current;
-    if (!scrollContainer) return;
-
-    const scroll = () => {
+    if (!containerRef.current) return;
+    
+    const tickerContainer = containerRef.current;
+    const firstChild = tickerContainer.firstElementChild as HTMLElement;
+    
+    if (!firstChild) return;
+    
+    const animateTicker = () => {
       if (isPaused) return;
-      if (scrollContainer.scrollLeft >= scrollContainer.scrollWidth / 2) {
-        scrollContainer.scrollLeft = 0;
+      
+      if (tickerContainer.scrollLeft >= firstChild.offsetWidth) {
+        tickerContainer.scrollLeft = 0;
       } else {
-        scrollContainer.scrollLeft += 1;
+        tickerContainer.scrollLeft += 1;
       }
     };
-
-    const interval = setInterval(scroll, 30);
-    return () => clearInterval(interval);
+    
+    const scrollInterval = setInterval(animateTicker, 30);
+    
+    return () => clearInterval(scrollInterval);
   }, [isPaused]);
 
   return (
     <div className="w-full bg-greencity-900 border-b border-greencity-800">
       <div 
-        ref={scrollRef}
-        className="overflow-hidden whitespace-nowrap py-2"
+        ref={containerRef}
+        className="overflow-hidden whitespace-nowrap py-1.5" // Reduced padding here
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
@@ -72,22 +78,22 @@ const StockItem = ({ stock }: { stock: StockData }) => {
   return (
     <a
       href={`/stocks/${stock.symbol}`}
-      className="inline-flex items-center px-4 py-1 hover:bg-greencity-800/50 transition-colors"
+      className="inline-flex items-center px-3 py-0.5 hover:bg-greencity-800/50 transition-colors" // Reduced padding
     >
-      <span className="font-medium text-white mr-2">{stock.symbol}</span>
-      <span className="text-gray-300 mr-2">₦{stock.price.toFixed(2)}</span>
+      <span className="font-medium text-white text-sm mr-1.5">{stock.symbol}</span>
+      <span className="text-gray-300 text-xs mr-1.5">₦{stock.price.toFixed(2)}</span>
       <span
         className={cn(
-          "inline-flex items-center",
+          "inline-flex items-center text-xs",
           isPositive ? "text-green-400" : 
           isNeutral ? "text-gray-400" : 
           "text-red-400"
         )}
       >
         {isPositive ? (
-          <ArrowUp className="w-3 h-3 mr-1" />
+          <ArrowUp className="w-2.5 h-2.5 mr-0.5" />
         ) : isNeutral ? null : (
-          <ArrowDown className="w-3 h-3 mr-1" />
+          <ArrowDown className="w-2.5 h-2.5 mr-0.5" />
         )}
         {stock.percentageChange > 0 ? "+" : ""}
         {stock.percentageChange.toFixed(2)}%
