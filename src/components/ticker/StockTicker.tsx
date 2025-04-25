@@ -1,9 +1,7 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowUp, ArrowDown } from 'lucide-react';
 import { cn } from "@/lib/utils";
 
-// Mock data structure
 interface StockData {
   symbol: string;
   price: number;
@@ -11,7 +9,6 @@ interface StockData {
   companyName: string;
 }
 
-// Mock data (replace with API data later)
 const mockStocks: StockData[] = [
   { symbol: 'AFRIPRUD', price: 16.60, percentageChange: 1.50, companyName: 'Africa Prudential Plc' },
   { symbol: 'DANGCEM', price: 425.00, percentageChange: -0.75, companyName: 'Dangote Cement Plc' },
@@ -26,33 +23,28 @@ export const StockTicker = () => {
   const [stocks] = useState<StockData[]>(mockStocks);
 
   useEffect(() => {
-    if (!containerRef.current) return;
-    
-    const tickerContainer = containerRef.current;
-    const firstChild = tickerContainer.firstElementChild as HTMLElement;
-    
-    if (!firstChild) return;
-    
+    const container = containerRef.current;
+    if (!container) return;
+
     const animateTicker = () => {
       if (isPaused) return;
-      
-      if (tickerContainer.scrollLeft >= firstChild.offsetWidth) {
-        tickerContainer.scrollLeft = 0;
+
+      if (container.scrollLeft >= container.scrollWidth / 2) {
+        container.scrollLeft = 0;
       } else {
-        tickerContainer.scrollLeft += 1;
+        container.scrollLeft += 1;
       }
     };
-    
-    const scrollInterval = setInterval(animateTicker, 30);
-    
-    return () => clearInterval(scrollInterval);
+
+    const interval = setInterval(animateTicker, 20);
+    return () => clearInterval(interval);
   }, [isPaused]);
 
   return (
     <div className="w-full bg-greencity-900 border-b border-greencity-800">
       <div 
         ref={containerRef}
-        className="overflow-hidden whitespace-nowrap py-1.5" // Reduced padding here
+        className="overflow-hidden whitespace-nowrap py-1.5 relative"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
@@ -78,7 +70,7 @@ const StockItem = ({ stock }: { stock: StockData }) => {
   return (
     <a
       href={`/stocks/${stock.symbol}`}
-      className="inline-flex items-center px-3 py-0.5 hover:bg-greencity-800/50 transition-colors" // Reduced padding
+      className="inline-flex items-center px-3 py-0.5 hover:bg-greencity-800/50 transition-colors"
     >
       <span className="font-medium text-white text-sm mr-1.5">{stock.symbol}</span>
       <span className="text-gray-300 text-xs mr-1.5">₦{stock.price.toFixed(2)}</span>
