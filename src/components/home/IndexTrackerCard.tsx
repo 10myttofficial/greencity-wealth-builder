@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   Select, 
@@ -18,7 +19,7 @@ import {
   ChartTooltipContent 
 } from '@/components/ui/chart';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowUp, ArrowDown, HelpCircle, ZoomIn, ZoomOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { 
@@ -124,7 +125,8 @@ const IndexTrackerCard: React.FC = () => {
   
   return (
     <div className="space-y-8">
-      <Card className="w-full shadow-md border-gray-200">
+      {/* Index Tracker Chart Card */}
+      <Card className="w-full shadow-md border-gray-200 overflow-hidden">
         <CardContent className="px-4 py-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
             <div className="w-full md:w-64">
@@ -284,9 +286,12 @@ const IndexTrackerCard: React.FC = () => {
         </CardContent>
       </Card>
       
+      {/* NGX Banking Companies Card - Now completely separate */}
       <Card className="w-full shadow-md border-gray-200">
-        <CardContent className="px-4 py-6">
-          <h3 className="text-xl font-bold text-greencity-800 mb-4">NGX BANKING Companies</h3>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-xl font-bold text-greencity-800">NGX BANKING Companies</CardTitle>
+        </CardHeader>
+        <CardContent>
           <div className="overflow-x-auto">
             <Table>
               <TableHeader className="bg-greencity-700">
