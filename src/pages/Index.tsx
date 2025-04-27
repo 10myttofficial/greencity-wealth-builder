@@ -18,7 +18,7 @@ const Index = () => {
       <StockTicker />
       <main className="flex-grow">
         <AnimatedHero />
-        <section className="container mx-auto px-4 py-8">
+        <section className="container mx-auto px-4 py-12">
           <IndexTrackerCard />
         </section>
         <ProductShowcase />
