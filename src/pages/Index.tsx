@@ -9,6 +9,7 @@ import Testimonials from '../components/home/Testimonials';
 import CtaSection from '../components/home/CtaSection';
 import FloatingChatButton from '../components/chat/FloatingChatButton';
 import StockTicker from '../components/ticker/StockTicker';
+import IndexTrackerCard from '../components/home/IndexTrackerCard';
 
 const Index = () => {
   return (
@@ -17,6 +18,9 @@ const Index = () => {
       <StockTicker />
       <main className="flex-grow">
         <AnimatedHero />
+        <section className="container mx-auto px-4 py-8">
+          <IndexTrackerCard />
+        </section>
         <ProductShowcase />
         <Features />
         <Testimonials />
