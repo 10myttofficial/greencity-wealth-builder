@@ -16,6 +16,26 @@ const mockStocks: StockData[] = [
   { symbol: 'ZENITHBANK', price: 32.45, percentageChange: 2.30, companyName: 'Zenith Bank Plc' },
   { symbol: 'GTCO', price: 28.90, percentageChange: 0.00, companyName: 'Guaranty Trust Holding Co.' },
   { symbol: 'ACCESSCORP', price: 18.75, percentageChange: -1.25, companyName: 'Access Holdings Plc' },
+  { symbol: 'MTNN', price: 235.50, percentageChange: 1.80, companyName: 'MTN Nigeria Communications Plc' },
+  { symbol: 'AIRTELAFRI', price: 2050.00, percentageChange: 2.15, companyName: 'Airtel Africa Plc' },
+  { symbol: 'BUACEMENT', price: 95.00, percentageChange: -0.50, companyName: 'BUA Cement Plc' },
+  { symbol: 'BUAFOODS', price: 128.50, percentageChange: 1.20, companyName: 'BUA Foods Plc' },
+  { symbol: 'NESTLE', price: 1150.00, percentageChange: -0.90, companyName: 'Nestle Nigeria Plc' },
+  { symbol: 'NB', price: 37.00, percentageChange: -1.80, companyName: 'Nigerian Breweries Plc' },
+  { symbol: 'SEPLAT', price: 1480.00, percentageChange: 3.25, companyName: 'Seplat Energy Plc' },
+  { symbol: 'STANBIC', price: 55.00, percentageChange: 0.85, companyName: 'Stanbic IBTC Holdings Plc' },
+  { symbol: 'FBNH', price: 16.95, percentageChange: -0.60, companyName: 'FBN Holdings Plc' },
+  { symbol: 'UBA', price: 19.50, percentageChange: 1.40, companyName: 'United Bank for Africa Plc' },
+  { symbol: 'OANDO', price: 8.45, percentageChange: -2.10, companyName: 'Oando Plc' },
+  { symbol: 'TRANSCORP', price: 5.20, percentageChange: 4.20, companyName: 'Transnational Corporation Plc' },
+  { symbol: 'FLOURMILL', price: 32.80, percentageChange: -0.95, companyName: 'Flour Mills of Nigeria Plc' },
+  { symbol: 'GUINNESS', price: 75.00, percentageChange: 1.75, companyName: 'Guinness Nigeria Plc' },
+  { symbol: 'PZ', price: 22.35, percentageChange: -1.15, companyName: 'PZ Cussons Nigeria Plc' },
+  { symbol: 'TOTAL', price: 310.50, percentageChange: 2.40, companyName: 'TotalEnergies Marketing Nigeria Plc' },
+  { symbol: 'INTBREW', price: 4.95, percentageChange: -3.20, companyName: 'International Breweries Plc' },
+  { symbol: 'CADBURY', price: 17.80, percentageChange: 1.60, companyName: 'Cadbury Nigeria Plc' },
+  { symbol: 'WAPCO', price: 45.20, percentageChange: 0.90, companyName: 'Lafarge Africa Plc' },
+  { symbol: 'UACN', price: 12.85, percentageChange: -0.75, companyName: 'UAC of Nigeria Plc' }
 ];
 
 export const StockTicker = () => {
