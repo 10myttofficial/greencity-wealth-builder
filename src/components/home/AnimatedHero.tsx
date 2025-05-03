@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
 import { gsap } from 'gsap';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectFade, Autoplay, Thumbs } from 'swiper/modules';
@@ -154,26 +153,6 @@ const AnimatedHero = () => {
               <Button asChild className="bg-greencity-500 hover:bg-greencity-600 text-white border border-white hover:shadow-lg transition-all duration-300 text-base h-12 px-8">
                 <Link to="/signup">GET STARTED</Link>
               </Button>
-              <Button asChild variant="outline" className="border-white text-white hover:bg-white/20 text-base h-12 px-6">
-                <Link to="/products" className="flex items-center">
-                  Explore Products <ArrowRight size={16} className="ml-2" />
-                </Link>
-              </Button>
-            </div>
-            
-            <div className="flex flex-wrap justify-start gap-8 pt-4">
-              <div className="text-center">
-                <p className="text-3xl font-bold text-greencity-500">₦50B+</p>
-                <p className="text-sm text-white">Assets Managed</p>
-              </div>
-              <div className="text-center">
-                <p className="text-3xl font-bold text-greencity-500">20K+</p>
-                <p className="text-sm text-white">Happy Clients</p>
-              </div>
-              <div className="text-center">
-                <p className="text-3xl font-bold text-greencity-500">15%</p>
-                <p className="text-sm text-white">Avg Annual ROI</p>
-              </div>
             </div>
           </div>
         </div>

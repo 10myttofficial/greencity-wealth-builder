@@ -22,7 +22,7 @@ interface IndexChartProps {
 
 const IndexChart: React.FC<IndexChartProps> = ({ chartData, formatDate }) => {
   return (
-    <div className="h-80 mb-6">
+    <div className="h-[400px] mb-6">
       <ChartContainer
         config={{
           index: { color: "#82ca9d" },
